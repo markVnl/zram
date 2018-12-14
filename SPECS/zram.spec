@@ -1,6 +1,6 @@
 Name:      zram
-Version:   0.2
-Release:   2%{?dist}
+Version:   0.3
+Release:   1%{?dist}
 Summary:   ZRAM for swap config and services for Fedora/NS7
 License:   GPLv2+
 
@@ -53,6 +53,9 @@ install -pm 0755 %{SOURCE4} %{buildroot}%{_sbindir}
 %{_sbindir}/zramstop
 
 %changelog
+* Fri Dec 14 2018 Mark Verlinde <mark.verlinde@gmail.com> 0.3-1
+- Add CentOS7 x86_64 compat which lacks lz4 support (tk @gsanchietti)
+
 * Mon Oct 08 2018 Mark Verlinde <mark.verlinde@gmail.com> 0.2-2
 - Rebuild for ns7, License moved to docdir
 
