@@ -12,8 +12,15 @@ zram_size=$((${mem_total} / ${factor} /1024))
 # zram in recent kernels is multitreaded so we don't need to balance across CPUs
 modprobe -q zram num_devices=1
 
+# Lz4 is not supported on CentOS kernel for x86_64
+arch=$(uname -m)
+if [ "$arch" == "x86_64" ]; then
+    algorithm="lzo"
+else
+    algorithm="lz4"
+fi
 # Create ZRAM with first device, lz4 algorithm
-zramdev=$(zramctl --find --algorithm lz4 --size ${zram_size}MB 2>&1)
+zramdev=$(zramctl --find --algorithm $algorithm --size ${zram_size}MB 2>&1)
 # The above returns the device. Use it below
 mkswap $zramdev
 swapon $zramdev
@@ -21,4 +28,10 @@ swapon $zramdev
 # Investigate this and swapiness
 # echo 0 > /proc/sys/vm/page-cluster
 
-echo -e "\nActivated ZRAM swap device of ${zram_size} MB\n"
+if [ $? -gt 0 ]; then
+    echo -e "\nError during $zramdev activation!\n"
+    exit 1
+else
+    echo -e "\nActivated ZRAM swap device of ${zram_size} MB\n"
+    exit 0
+fi
