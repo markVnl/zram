@@ -1,10 +1,10 @@
 Name:      zram
-Version:   0.3
+Version:   0.4
 Release:   1%{?dist}
-Summary:   ZRAM for swap config and services for Fedora/NS7
+Summary:   ZRAM for swap config and services for Fedora
 License:   GPLv2+
 
-# No upstream as it's Fedora/NS specific.
+# No upstream as it's Fedora specific.
 Source0:   COPYING
 Source1:   zram.conf
 Source2:   zram-swap.service
@@ -29,8 +29,8 @@ ZRAM as a swap device based on criteria such as available memory.
 # None required
 
 %install
-install -d %{buildroot}%{_docdir}/%{name}/
-install -pm 0644 %{SOURCE0} %{buildroot}%{_docdir}/%{name}/COPYING
+install -d %{buildroot}%{_datadir}/licenses/%{name}/
+install -pm 0644 %{SOURCE0} %{buildroot}%{_datadir}/licenses/%{name}/COPYING
 
 install -d %{buildroot}%{_sysconfdir}/
 install -pm 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/
@@ -46,18 +46,18 @@ install -pm 0755 %{SOURCE4} %{buildroot}%{_sbindir}
 %systemd_postun zram-swap.service
 
 %files
-%{_docdir}/%{name}/COPYING
+%license COPYING
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_unitdir}/zram-swap.service
 %{_sbindir}/zramstart
 %{_sbindir}/zramstop
 
 %changelog
-* Fri Dec 14 2018 Mark Verlinde <mark.verlinde@gmail.com> 0.3-1
-- Add CentOS7 x86_64 compat which lacks lz4 support (tk @gsanchietti)
+* Wed Jun 26 2019 Peter Robinson <pbrobinson@fedoraproject.org> 0.4-1
+- General improvements (Chris Murphy)
 
-* Mon Oct 08 2018 Mark Verlinde <mark.verlinde@gmail.com> 0.2-2
-- Rebuild for ns7, License moved to docdir
+* Sat Nov 24 2018 Peter Robinson <pbrobinson@fedoraproject.org> 0.3-1
+- Add support for swap priority
 
 * Thu Jul 19 2018 Peter Robinson <pbrobinson@fedoraproject.org> 0.2-1
 - Service ordering fixes, minor cleanup
